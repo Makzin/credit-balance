@@ -2,8 +2,8 @@ import os
 import csv
 from refreshbooks import api
 
-url = 'jitterbeast.freshbooks.com'
-token = 'cf103a226b294dea127de9ceb4fc7394'
+url = ''
+token = ''
 
 
 def main_program():
