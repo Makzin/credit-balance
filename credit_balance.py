@@ -26,6 +26,7 @@ def main_program():
 
     with open(ensure_file(url + '_credit_report.csv'),'wb') as f:
         w = csv.writer(f)
+        w.writerow(["Disclaimer - this will only print off credits in the base currency of the account!"])
         w.writerow(["ORGANIZATION", "BALANCE"])        
         w.writerows(dict_test.items())
 
