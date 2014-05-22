@@ -2,36 +2,32 @@ import os
 import csv
 from refreshbooks import api
 
-url = ''
-token = ''
+url = 'jitterbeast.freshbooks.com'
+token = 'cf103a226b294dea127de9ceb4fc7394'
 
 
 def main_program():
     api_caller = api.TokenClient(url, token)
     # get all the clients from our account
     all_clients = list_all(api_caller.client.list, 'client')
+    client_name_list = []
+    credit_list = []
     dict_test = {}
-        
-    #loop through each client and add them and their balance to the dictionary    
+    path = os.path.expanduser('~/Desktop/'+url+'_credit_report/')
+
+    ensure_dir(path)
+
+    #loop through each client
     for client in all_clients:
-    	dict_test[client.organization]=client.credit
-    
-    print dict_test
+        dict_test[client.organization]=client.credit
 
-    #fieldnames = {'Organization': 'Balance'}
-    #with open('credit_balance.csv', 'wb') as f: 
-    #    writer = csv.DictWriter(f, delimiter=':', fieldnames=fieldnames)
-    #    writer.writerows(dict_test)
-    #    for row in dict_test: 
-    #            writer.writerow(row)
+    #print dict_test
 
-    #test_file = open('test2.csv','w')
-    #csvwriter = csv.DictWriter(test_file, delimiter=':', fieldnames=fieldnames)
-    #csvwriter.writerow(dict((fn, fn) for fn in fieldnames))
-    #for row in dict_test: 
-     #   csvwriter.writerow(row)
-    #test_file.close()
-    
+
+    with open(ensure_file(url + '_credit_report.csv'),'wb') as f:
+        w = csv.writer(f)
+        w.writerow(["ORGANIZATION", "BALANCE"])        
+        w.writerows(dict_test.items())
 
 def list_all(command, entity):
     page = 1
@@ -52,5 +48,19 @@ def list_all(command, entity):
 def pluralize(entity):
     return entity + 's'
 
+def ensure_dir(f):
+    d = os.path.dirname(f)
+    if not os.path.exists(d):
+        os.makedirs(d)
+    os.chdir(d)
+
+def ensure_file(f):
+    tag = 1
+    while os.path.isfile(f):
+      f = "%s_credit_report #%s.csv" % (url, str(tag))
+      tag = tag + 1
+    return f
+
 
 main_program()
+
