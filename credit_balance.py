@@ -10,30 +10,28 @@ def main_program():
     api_caller = api.TokenClient(url, token)
     # get all the clients from our account
     all_clients = list_all(api_caller.client.list, 'client')
-    client_name_list = []
-    credit_list = []
-    dict_test = {"Organization": "Balance"}
-    
-    #loop through each client
-    for client in all_clients: 
-	   client_credit = client.credit
-	   credit_list.append(client_credit)
-	   client_name = client.organization
-	   client_name_list.append(client_name)
-    
-    #print client_name_list
-    #print credit_list
-    
+    dict_test = {}
+        
+    #loop through each client and add them and their balance to the dictionary    
     for client in all_clients:
-    	client_name = client.organization
-    	client_credit = client.credit
-    	dict_test[client_name]=client_credit
+    	dict_test[client.organization]=client.credit
     
     print dict_test
+
+    #fieldnames = {'Organization': 'Balance'}
+    #with open('credit_balance.csv', 'wb') as f: 
+    #    writer = csv.DictWriter(f, delimiter=':', fieldnames=fieldnames)
+    #    writer.writerows(dict_test)
+    #    for row in dict_test: 
+    #            writer.writerow(row)
+
+    #test_file = open('test2.csv','w')
+    #csvwriter = csv.DictWriter(test_file, delimiter=':', fieldnames=fieldnames)
+    #csvwriter.writerow(dict((fn, fn) for fn in fieldnames))
+    #for row in dict_test: 
+     #   csvwriter.writerow(row)
+    #test_file.close()
     
-    #writer= csv.writer(open('dict.csv', 'wb'))
-    #for key, value in dict_test(): 
-    #	writer.writerow([key, value])
 
 def list_all(command, entity):
     page = 1
